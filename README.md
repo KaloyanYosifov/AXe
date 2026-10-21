@@ -18,6 +18,15 @@ Or install in one command:
 brew install cameroncooke/axe/axe
 ```
 
+Or build from source and install with Homebrew:
+
+```bash
+git clone https://github.com/KaloyanYosifov/AXe.git
+AXe/scripts/install-from-source.sh
+```
+
+The script needs Xcode, and installs XcodeGen with Homebrew when it is missing. It builds without Developer ID signing or notarization, writes a formula into the local tap `local/axe` (set `AXE_TAP` to change it), and installs that formula. Run the script again to rebuild and reinstall. Uninstall with `brew uninstall axe`.
+
 Verify the CLI:
 
 ```bash

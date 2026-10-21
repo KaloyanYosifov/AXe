@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `scripts/install-from-source.sh`, which builds AXe from a checkout and installs it through a local Homebrew tap.
+
 ### Fixed
 
 - Fixed the first simulator gesture being silently dropped on Xcode 27 by priming DTUHID before sending input ([#71](https://github.com/cameroncooke/AXe/issues/71)).
