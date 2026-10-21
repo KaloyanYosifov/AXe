@@ -243,6 +243,19 @@ struct HIDInteractor {
         logger.info().log("Creating new HID connection for simulator \(simulator.udid)...")
         let hid = try await simulator.connectToHID()
 
+        do {
+            if hid.transportType == .dtuhid {
+                // dtuhidd activates its services only after a peer's first message and drops events
+                // sent before that. Usage zero is inert. Activation took up to ~1.45s on a fresh
+                // iOS 27 simulator and the transport has no readiness acknowledgement.
+                try await hid.send(event: .keyboard(direction: .up, keyCode: 0), logger: logger)
+                try await Task.sleep(for: .seconds(2))
+            }
+        } catch {
+            hid.disconnect()
+            throw error
+        }
+
         hidConnections[simulator.udid] = hid
         logger.info().log("HID connection created and cached for simulator \(simulator.udid)")
 

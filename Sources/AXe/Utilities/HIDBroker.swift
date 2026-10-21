@@ -276,13 +276,14 @@ enum HIDBroker {
         let startedAt = monotonicNow()
         let deadlineResult = startedAt.addingReportingOverflow(startupTimeoutNanoseconds)
         let deadline = deadlineResult.overflow ? UInt64.max : deadlineResult.partialValue
+        // Use the remaining startup budget: simulator readiness and DTUHID connection preparation
+        // can outlast the per-request I/O timeout.
         func handshakeTimeout() throws -> Int {
             let now = monotonicNow()
             guard now < deadline else {
                 throw HIDBrokerNotReadyError(diagnosticDescription: "The broker startup deadline expired.")
             }
-            let remainingMilliseconds = max(1, Int((deadline - now) / 1_000_000))
-            return min(serverIOTimeoutMilliseconds, remainingMilliseconds)
+            return max(1, Int((deadline - now) / 1_000_000))
         }
 
         do {
